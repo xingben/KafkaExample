@@ -3,7 +3,7 @@
  */
 package net.xingws.sample.kafka.app;
 
-import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -27,11 +27,11 @@ public class ProducerTest {
 		Injector injector = Guice.createInjector(new KafkaProducerPoolConfigModule());
 		
 		AlertingKafkaProducerPool pool = injector.getInstance(AlertingKafkaProducerPool.class);
-		Callback callback = new ProducerCallback();
 		
 		for(int i=0; i<10; ++i) {
 			AlertingKafkaProducer producer = pool.getPool().borrowObject();
-			producer.sendAsync("key"+i, "value"+i, "test", callback);
+			ProducerRecord<String, String> record = new ProducerRecord<String,String>("test", "key"+i, "value"+i);
+			producer.sendAsync(record, new ProducerCallback(record));
 			pool.getPool().returnObject(producer);
 		}
 		

@@ -30,6 +30,10 @@ public class AlertingKafkaProducer {
 		return this.producer.send(new ProducerRecord<>(topic, key, value), callback);
 	}
 	
+	public Future<RecordMetadata> sendAsync(ProducerRecord<String, String> record, Callback callback) {
+		return this.producer.send(record, callback);
+	}
+	
 	public void close() {
 		this.producer.close();
 	}
