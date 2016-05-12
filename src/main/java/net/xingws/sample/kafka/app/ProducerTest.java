@@ -28,14 +28,10 @@ public class ProducerTest {
 		
 		AlertingKafkaProducerPool pool = injector.getInstance(AlertingKafkaProducerPool.class);
 		
-		for(int i=0; i<100000; ++i) {
+		for(int i=0; i<10; ++i) {
 			AlertingKafkaProducer producer = pool.getPool().borrowObject();
-			ProducerRecord<String, String> record = new ProducerRecord<String,String>("hhh.0", "test"+i, "test"+i);
-			ProducerRecord<String, String> record1 = new ProducerRecord<String,String>("ttt.0", "testgroup"+i, "testgroup"+i);
-			ProducerRecord<String, String> record2 = new ProducerRecord<String,String>("ttt.1", "group"+i, "group"+i);
+			ProducerRecord<String, String> record = new ProducerRecord<String,String>("test", "test"+i+10, "test"+i);
 			producer.sendAsync(record, new ProducerCallback(record));
-			producer.sendAsync(record1, new ProducerCallback(record1));
-			producer.sendAsync(record2, new ProducerCallback(record2));
 			pool.getPool().returnObject(producer);
 		}
 		
